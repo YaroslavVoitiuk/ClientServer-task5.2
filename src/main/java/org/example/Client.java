@@ -15,20 +15,13 @@ public class Client extends Thread {
     @Override
     public void run() {
         InetSocketAddress socketAddress = new InetSocketAddress(HOST, PORT);
-        SocketChannel socketChannel = null;
-        try {
-            socketChannel = SocketChannel.open();
-            socketChannel.connect(socketAddress);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (Scanner scanner = new Scanner(System.in)) {
 
+        try (SocketChannel socketChannel = SocketChannel.open();
+             Scanner scanner = new Scanner(System.in)) {
+            socketChannel.connect(socketAddress);
             final ByteBuffer byteBuffer = ByteBuffer.allocate(BUFFER_SIZE);
             String data;
-
             while (true) {
-                assert socketChannel != null;
                 System.out.println("Введите текст для форматирования...");
                 data = scanner.nextLine();
                 if (data.equals("end")) {

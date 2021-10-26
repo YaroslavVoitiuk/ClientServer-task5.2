@@ -15,16 +15,9 @@ public class Server extends Thread {
     @Override
     public void run() {
         boolean isWorking = true;
-        ServerSocketChannel serverSocketChannel = null;
-        try {
-            serverSocketChannel = ServerSocketChannel.open();
-            serverSocketChannel.bind(new InetSocketAddress(HOST, PORT));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         while (isWorking) {
-            try {
-                assert serverSocketChannel != null;
+            try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
+                serverSocketChannel.bind(new InetSocketAddress(HOST, PORT));
                 try (SocketChannel socketChannel = serverSocketChannel.accept()) {
                     final ByteBuffer byteBuffer = ByteBuffer.allocate(BUFFER_SIZE);
                     while (socketChannel.isConnected()) {
